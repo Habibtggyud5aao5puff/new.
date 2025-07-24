@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  async function getIPInfo() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      document.getElementById('ip').textContent = data.ip;
+
+      // তারপর লোকেশন আনুন
+      const loc = await fetch('https://ipwho.is/' + data.ip);
+      const locData = await loc.json();
+
+      document.getElementById('country').textContent = locData.country;
+      document.getElementById('city').textContent = locData.city;
+      document.getElementById('isp').textContent = locData.connection.org;
+
+      document.getElementById('map').innerHTML = `<iframe
+        width="100%"
+        height="100%"
+        frameborder="0"
+        style="border:0"
+        src="https://maps.google.com/maps?q=${locData.latitude},${locData.longitude}&z=14&output=embed"
+        allowfullscreen>
+      </iframe>`;
+    } catch (err) {
+      alert("লোকেশন আনতে সমস্যা হয়েছে!");
+    }
+  }
+
+  getIPInfo();
+</script>
+
+  <meta charset="UTF-8" />
+  <title>My IP & Location</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 350px;
+      width: 90%;
+    }
+
+    .info {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #000;
+    }
+
+    #map {
+      width: 100%;
+      height: 200px;
+      margin-top: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>📡 আপনার IP এবং লোকেশন</h1>
+  <div class="card">
+    <div class="info"><span class="label">IP Address:</span> <span id="ip">Loading...</span></div>
+    <div class="info"><span class="label">Country:</span> <span id="country">Loading...</span></div>
+    <div class="info"><span class="label">City:</span> <span id="city">Loading...</span></div>
+    <div class="info"><span class="label">ISP:</span> <span id="isp">Loading...</span></div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    async function getIPInfo() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+
+        document.getElementById('ip').textContent = data.ip;
+        document.getElementById('country').textContent = data.country_name;
+        document.getElementById('city').textContent = data.city;
+        document.getElementById('isp').textContent = data.org;
+
+        // Map
+        const map = document.getElementById('map');
+        const lat = data.latitude;
+        const lon = data.longitude;
+        map.innerHTML = `<iframe
+          width="100%"
+          height="100%"
+          frameborder="0"
+          style="border:0"
+          src="https://maps.google.com/maps?q=${lat},${lon}&z=14&output=embed"
+          allowfullscreen>
+        </iframe>`;
+      } catch (err) {
+        alert("লোকেশন তথ্য আনতে সমস্যা হয়েছে!");
+      }
+    }
+
+    getIPInfo();
+  </script>
+</body>
+</html>
